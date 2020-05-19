@@ -47,7 +47,7 @@ using namespace std;
 class OscReceiver : public osc::OscPacketListener 
 {
     public:
-        OscReceiver( int port = 7000, const char* oscRoute = "/master" );
+        OscReceiver( int port = 7000, const string oscRoute = "/master" );
         ~OscReceiver( void );
 
         UdpListeningReceiveSocket *udpListener;

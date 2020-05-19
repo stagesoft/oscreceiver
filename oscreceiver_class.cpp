@@ -35,7 +35,7 @@
 
 
 ////////////////////////////////////////////
-OscReceiver::OscReceiver( int port, const char* oscRoute )
+OscReceiver::OscReceiver( int port, const string oscRoute )
                         : oscPort(port), oscAddress(oscRoute)
 {
     // OSC UDP Listener

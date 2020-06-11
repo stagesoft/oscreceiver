@@ -23,49 +23,53 @@
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
-// Stage Lab SysQ OSC receiver class header file
+// Stage Lab SysQ OSC receiver class source file
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-#ifndef OSCRECEIVER_CLASS_H
-#define OSCRECEIVER_CLASS_H
+#include "oscreceiver.h"
 
-#include <iostream>
-#include <thread>
-#include "./oscpack/osc/OscPacketListener.h"
-#include "./oscpack/osc/OscReceivedElements.h"
-#include "./oscpack/ip/UdpSocket.h"
-#include "./oscpack/ip/IpEndpointName.h"
+////////////////////////////////////////////
+// Initializing static class members
 
-//////////////////////////////////////////////////////////
-// Preprocessor definitions
-#define PORT 7000
 
-using namespace std;
-
-class OscReceiver : public osc::OscPacketListener 
+////////////////////////////////////////////
+OscReceiver::OscReceiver( int port, const string oscRoute )
+                        : oscPort(port), oscAddress(oscRoute)
 {
-    public:
-        OscReceiver( int port = 7000, const string oscRoute = "/master" );
-        ~OscReceiver( void );
+    // OSC UDP Listener
+    udpListener = new UdpListeningReceiveSocket(
+            IpEndpointName( IpEndpointName::ANY_ADDRESS, oscPort ),
+            this );
 
-        UdpListeningReceiveSocket *udpListener;
+    // Set and detach our threaded checker loop
+	std::thread runnerThread( & OscReceiver::threadedRun, this );
+	runnerThread.detach();
 
-        void setOscAddress( std::string address );
-        std::string getOscAddress( void );
+}
 
-    protected:
+////////////////////////////////////////////
+OscReceiver::~OscReceiver( void )
+{
 
-        inline virtual void ProcessMessage( const osc::ReceivedMessage& /*m*/ , 
-                                            const IpEndpointName& /*remoteEndpoint*/ ) {};
+}
 
-        void threadedRun( void );
+////////////////////////////////////////////
+void OscReceiver::threadedRun ( void )
+{
+    std::cout << endl << endl << "OSC object ready & listening at port " << oscPort << " address " << oscAddress << endl << endl;
+    udpListener->Run();
+} 
 
-        int oscPort;
-        std::string oscAddress;
+////////////////////////////////////////////
+void OscReceiver::setOscAddress( std::string address )
+{
+    oscAddress = address;
+}
 
-};
-
-
-#endif // OSCRECEIVER_CLASS_H
+////////////////////////////////////////////
+std::string OscReceiver::getOscAddress( void )
+{
+    return oscAddress;
+}

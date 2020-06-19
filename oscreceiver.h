@@ -33,10 +33,10 @@
 
 #include <iostream>
 #include <thread>
-#include "./oscpack/osc/OscPacketListener.h"
-#include "./oscpack/osc/OscReceivedElements.h"
-#include "./oscpack/ip/UdpSocket.h"
-#include "./oscpack/ip/IpEndpointName.h"
+#include "oscpack/osc/OscPacketListener.h"
+#include "oscpack/osc/OscReceivedElements.h"
+#include "oscpack/ip/UdpSocket.h"
+#include "oscpack/ip/IpEndpointName.h"
 
 //////////////////////////////////////////////////////////
 // Preprocessor definitions
